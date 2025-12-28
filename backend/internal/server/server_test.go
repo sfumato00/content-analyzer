@@ -6,18 +6,18 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/yourusername/content-analyzer/internal/config"
+	"github.com/sfumato00/content-analyzer/internal/config"
 )
 
 func TestHealthEndpoint(t *testing.T) {
 	// Create test configuration
 	cfg := &config.Config{
-		Port:        "8080",
-		Environment: "test",
-		GeminiAPIKey: "test-key-for-testing-purposes-only-12345",
-		DatabaseURL: "postgresql://localhost/test",
-		RedisURL:    "redis://localhost:6379",
-		JWTSecret:   "test-secret-that-is-at-least-32-characters-long",
+		Port:           "8080",
+		Environment:    "test",
+		GeminiAPIKey:   "test-key-for-testing-purposes-only-12345",
+		DatabaseURL:    "postgresql://localhost/test",
+		RedisURL:       "redis://localhost:6379",
+		JWTSecret:      "test-secret-that-is-at-least-32-characters-long",
 		AllowedOrigins: []string{"http://localhost:3000"},
 	}
 
@@ -58,12 +58,12 @@ func TestHealthEndpoint(t *testing.T) {
 
 func TestRootEndpoint(t *testing.T) {
 	cfg := &config.Config{
-		Port:        "8080",
-		Environment: "test",
-		GeminiAPIKey: "test-key-for-testing-purposes-only-12345",
-		DatabaseURL: "postgresql://localhost/test",
-		RedisURL:    "redis://localhost:6379",
-		JWTSecret:   "test-secret-that-is-at-least-32-characters-long",
+		Port:           "8080",
+		Environment:    "test",
+		GeminiAPIKey:   "test-key-for-testing-purposes-only-12345",
+		DatabaseURL:    "postgresql://localhost/test",
+		RedisURL:       "redis://localhost:6379",
+		JWTSecret:      "test-secret-that-is-at-least-32-characters-long",
 		AllowedOrigins: []string{"http://localhost:3000"},
 	}
 
@@ -90,12 +90,12 @@ func TestRootEndpoint(t *testing.T) {
 
 func TestNotFoundEndpoint(t *testing.T) {
 	cfg := &config.Config{
-		Port:        "8080",
-		Environment: "test",
-		GeminiAPIKey: "test-key-for-testing-purposes-only-12345",
-		DatabaseURL: "postgresql://localhost/test",
-		RedisURL:    "redis://localhost:6379",
-		JWTSecret:   "test-secret-that-is-at-least-32-characters-long",
+		Port:           "8080",
+		Environment:    "test",
+		GeminiAPIKey:   "test-key-for-testing-purposes-only-12345",
+		DatabaseURL:    "postgresql://localhost/test",
+		RedisURL:       "redis://localhost:6379",
+		JWTSecret:      "test-secret-that-is-at-least-32-characters-long",
 		AllowedOrigins: []string{"http://localhost:3000"},
 	}
 
@@ -113,12 +113,12 @@ func TestNotFoundEndpoint(t *testing.T) {
 
 func TestCORS(t *testing.T) {
 	cfg := &config.Config{
-		Port:        "8080",
-		Environment: "test",
-		GeminiAPIKey: "test-key-for-testing-purposes-only-12345",
-		DatabaseURL: "postgresql://localhost/test",
-		RedisURL:    "redis://localhost:6379",
-		JWTSecret:   "test-secret-that-is-at-least-32-characters-long",
+		Port:           "8080",
+		Environment:    "test",
+		GeminiAPIKey:   "test-key-for-testing-purposes-only-12345",
+		DatabaseURL:    "postgresql://localhost/test",
+		RedisURL:       "redis://localhost:6379",
+		JWTSecret:      "test-secret-that-is-at-least-32-characters-long",
 		AllowedOrigins: []string{"http://localhost:3000"},
 	}
 

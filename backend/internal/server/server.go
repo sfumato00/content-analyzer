@@ -15,9 +15,9 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httplog/v2"
 
-	"github.com/yourusername/content-analyzer/internal/config"
-	"github.com/yourusername/content-analyzer/internal/handlers"
-	custommw "github.com/yourusername/content-analyzer/internal/middleware"
+	"github.com/sfumato00/content-analyzer/internal/config"
+	"github.com/sfumato00/content-analyzer/internal/handlers"
+	custommw "github.com/sfumato00/content-analyzer/internal/middleware"
 )
 
 // Server represents the HTTP server

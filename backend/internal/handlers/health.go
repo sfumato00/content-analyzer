@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/yourusername/content-analyzer/internal/response"
+	"github.com/sfumato00/content-analyzer/internal/response"
 )
 
 // HealthHandler handles health check requests

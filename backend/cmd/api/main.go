@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/yourusername/content-analyzer/internal/config"
-	"github.com/yourusername/content-analyzer/internal/server"
+	"github.com/sfumato00/content-analyzer/internal/config"
+	"github.com/sfumato00/content-analyzer/internal/server"
 )
 
 func main() {
@@ -62,19 +62,20 @@ func setupLogging(cfg *config.Config) {
 
 // printBanner prints a startup banner
 func printBanner(cfg *config.Config) {
-	fmt.Println("\n" + `
-   ____            _             _     _                _
+	fmt.Println()
+	fmt.Println(`   ____            _             _     _                _
   / ___|___  _ __ | |_ ___ _ __ | |_  / \   _ __   __ _| |_   _ ______ _ __
  | |   / _ \| '_ \| __/ _ \ '_ \| __| / _ \ | '_ \ / _` + "`" + ` | | | | |_  / _ \ '__|
  | |__| (_) | | | | ||  __/ | | | |_ / ___ \| | | | (_| | | |_| |/ /  __/ |
   \____\___/|_| |_|\__\___|_| |_|\__/_/   \_\_| |_|\__,_|_|\__, /___\___|_|
-                                                            |___/
-` + "\n")
+                                                            |___/`)
+	fmt.Println()
 
 	fmt.Println("  AI-Powered Content Analysis Platform")
 	fmt.Println("  =====================================")
 	fmt.Printf("  Environment: %s\n", cfg.Environment)
 	fmt.Printf("  Port:        %s\n", cfg.Port)
 	fmt.Printf("  URL:         http://localhost:%s\n", cfg.Port)
-	fmt.Println("  =====================================\n")
+	fmt.Println("  =====================================")
+	fmt.Println()
 }

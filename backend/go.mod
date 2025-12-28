@@ -1,4 +1,4 @@
-module github.com/yourusername/content-analyzer
+module github.com/sfumato00/content-analyzer
 
 go 1.21
 

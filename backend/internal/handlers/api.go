@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/yourusername/content-analyzer/internal/config"
-	"github.com/yourusername/content-analyzer/internal/response"
+	"github.com/sfumato00/content-analyzer/internal/config"
+	"github.com/sfumato00/content-analyzer/internal/response"
 )
 
 // APIHandler handles general API requests
