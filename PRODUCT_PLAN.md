@@ -695,7 +695,7 @@ Domain:            $1/month (optional, use *.fly.dev subdomain for free)
 
 **Day 1-2: Setup**
 1. Create GitHub repository
-2. Initialize Go project: `go mod init github.com/yourusername/content-analyzer`
+2. Initialize Go project: `go mod init github.com/sfumato00/content-analyzer`
 3. Set up Docker Compose with PostgreSQL + Redis
 4. Get Gemini API key (free): https://makersuite.google.com/app/apikey
 5. Create basic project structure
