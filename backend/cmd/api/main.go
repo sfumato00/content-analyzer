@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"log/slog"
 	"os"
 
+	"github.com/sfumato00/content-analyzer/internal/cache"
 	"github.com/sfumato00/content-analyzer/internal/config"
+	"github.com/sfumato00/content-analyzer/internal/database"
 	"github.com/sfumato00/content-analyzer/internal/server"
 )
 
@@ -20,11 +23,36 @@ func main() {
 	// Configure structured logging
 	setupLogging(cfg)
 
+	// Run migrations in development mode
+	if cfg.IsDevelopment() {
+		slog.Info("Running database migrations (development mode)")
+		if err := database.RunMigrations(cfg.DatabaseURL, "./migrations"); err != nil {
+			slog.Warn("Failed to run migrations", "error", err)
+		}
+	}
+
+	// Initialize database connection
+	ctx := context.Background()
+	db, err := database.New(ctx, cfg.DatabaseURL)
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	defer db.Close()
+
+	slog.Info("Database connection established")
+
+	// Initialize Redis cache
+	redisCache, err := cache.New(cfg.RedisURL)
+	if err != nil {
+		log.Fatalf("Failed to connect to Redis: %v", err)
+	}
+	defer redisCache.Close()
+
 	// Print startup banner
 	printBanner(cfg)
 
 	// Create and start HTTP server
-	srv := server.New(cfg)
+	srv := server.New(cfg, db, redisCache)
 
 	slog.Info("Application starting",
 		"environment", cfg.Environment,

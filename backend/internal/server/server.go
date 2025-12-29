@@ -15,7 +15,9 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httplog/v2"
 
+	"github.com/sfumato00/content-analyzer/internal/cache"
 	"github.com/sfumato00/content-analyzer/internal/config"
+	"github.com/sfumato00/content-analyzer/internal/database"
 	"github.com/sfumato00/content-analyzer/internal/handlers"
 	custommw "github.com/sfumato00/content-analyzer/internal/middleware"
 )
@@ -25,13 +27,17 @@ type Server struct {
 	config     *config.Config
 	router     *chi.Mux
 	httpServer *http.Server
+	db         *database.Database
+	cache      *cache.Cache
 }
 
 // New creates a new server instance
-func New(cfg *config.Config) *Server {
+func New(cfg *config.Config, db *database.Database, cache *cache.Cache) *Server {
 	s := &Server{
 		config: cfg,
 		router: chi.NewRouter(),
+		db:     db,
+		cache:  cache,
 	}
 
 	s.setupMiddleware()
@@ -99,7 +105,7 @@ func (s *Server) setupMiddleware() {
 // setupRoutes configures all routes
 func (s *Server) setupRoutes() {
 	// Create handlers
-	healthHandler := handlers.NewHealthHandler()
+	healthHandler := handlers.NewHealthHandler(s.db, s.cache)
 	apiHandler := handlers.NewAPIHandler(s.config)
 
 	// Root endpoint

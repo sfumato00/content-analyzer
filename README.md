@@ -53,6 +53,8 @@ A personal portfolio project demonstrating modern backend engineering skills thr
    go run cmd/api/main.go
    ```
 
+   The application will automatically run database migrations in development mode.
+
    You should see:
    ```
    🚀 Content Analyzer API
@@ -60,17 +62,114 @@ A personal portfolio project demonstrating modern backend engineering skills thr
    Environment: development
    Port: 8080
    ...
-   ✅ Server ready to start on port 8080
+   ✅ Server ready on port 8080
    ```
 
-### Testing the Configuration
+### Database Setup
 
-Run the application to verify your environment variables are loaded correctly:
+The application automatically runs migrations on startup in development mode. You can also manage migrations manually:
 
 ```bash
 cd backend
-go run cmd/api/main.go
+
+# Run all pending migrations
+./scripts/migrate.sh up
+
+# Rollback last migration
+./scripts/migrate.sh down
+
+# Check current migration version
+./scripts/migrate.sh version
+
+# Create new migration
+./scripts/migrate.sh create add_new_table
 ```
+
+**Database Schema**: The initial migration creates three tables:
+- `users` - User accounts with email and password
+- `submissions` - User-submitted content for analysis
+- `analyses` - AI analysis results from Gemini
+
+### Running with Docker
+
+You can run the entire stack in Docker:
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f api
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up -d --build
+```
+
+### Verification
+
+After starting the services, verify everything is working:
+
+```bash
+# Check API health
+curl http://localhost:8080/health
+```
+
+**Expected response:**
+```json
+{
+  "status": "healthy",
+  "uptime": "1m30s",
+  "version": "1.0.0",
+  "components": {
+    "database": "connected",
+    "redis": "connected"
+  }
+}
+```
+
+**Verify database tables:**
+```bash
+docker-compose exec postgres psql -U postgres -d content_analyzer -c "\dt"
+```
+
+You should see: `users`, `submissions`, `analyses`
+
+**Verify Redis:**
+```bash
+docker-compose exec redis redis-cli ping
+# Should return: PONG
+```
+
+**Run automated verification:**
+```bash
+./scripts/verify-setup.sh
+```
+
+### Troubleshooting
+
+**Database connection failed:**
+- Ensure PostgreSQL is running: `docker-compose ps postgres`
+- Check DATABASE_URL in .env
+- View logs: `docker-compose logs postgres`
+
+**Redis connection failed:**
+- Ensure Redis is running: `docker-compose ps redis`
+- Check REDIS_URL in .env
+- View logs: `docker-compose logs redis`
+
+**Port already in use:**
+```bash
+# Find what's using port 8080
+lsof -i :8080
+
+# Or change PORT in .env
+PORT=8081
+```
+
+**For detailed setup instructions**, see [SETUP.md](./SETUP.md)
 
 ## Project Structure
 
