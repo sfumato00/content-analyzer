@@ -171,6 +171,45 @@ PORT=8081
 
 **For detailed setup instructions**, see [SETUP.md](./SETUP.md)
 
+## API Endpoints
+
+### Authentication (Public)
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - Login and get JWT token
+- `POST /api/v1/auth/logout` - Logout (client-side token removal)
+
+### User (Protected - Requires JWT)
+- `GET /api/v1/me` - Get current user info
+- `GET /api/v1/me/stats` - Get user statistics (coming soon)
+
+### Submissions (Protected - Requires JWT)
+- `POST /api/v1/submissions` - Submit content for analysis (coming soon)
+- `GET /api/v1/submissions` - List user's submissions (coming soon)
+- `GET /api/v1/submissions/:id` - Get submission details (coming soon)
+- `GET /api/v1/submissions/:id/analysis` - Get AI analysis (coming soon)
+
+### Health
+- `GET /health` - Health check endpoint
+- `GET /ready` - Readiness check
+- `GET /live` - Liveness check
+
+**Example usage:**
+```bash
+# Register
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password123"}'
+
+# Login
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password123"}'
+
+# Get current user (requires token from login)
+curl http://localhost:8080/api/v1/me \
+  -H "Authorization: Bearer <your-jwt-token>"
+```
+
 ## Project Structure
 
 ```
@@ -181,18 +220,20 @@ content-analyzer/
 │   │       └── main.go           # Application entry point
 │   ├── internal/
 │   │   ├── config/               # Configuration management
-│   │   ├── auth/                 # Authentication (JWT, middleware)
-│   │   ├── database/             # PostgreSQL setup
-│   │   ├── handlers/             # HTTP handlers
-│   │   ├── models/               # Data models
-│   │   ├── services/             # Business logic
-│   │   │   ├── ai/               # Gemini integration
-│   │   │   └── queue/            # Background jobs
-│   │   └── cache/                # Redis client
-│   ├── migrations/               # SQL migrations
-│   ├── Dockerfile
-│   └── go.mod
-├── frontend/
+│   │   ├── auth/                 # Authentication (JWT, middleware) ✅
+│   │   ├── database/             # PostgreSQL setup ✅
+│   │   ├── handlers/             # HTTP handlers ✅
+│   │   ├── models/               # Data models ✅
+│   │   ├── middleware/           # Security middleware ✅
+│   │   ├── response/             # Response helpers ✅
+│   │   ├── cache/                # Redis client ✅
+│   │   └── services/             # Business logic (coming soon)
+│   │       ├── ai/               # Gemini integration
+│   │       └── queue/            # Background jobs
+│   ├── migrations/               # SQL migrations ✅
+│   ├── Dockerfile                # ✅
+│   └── go.mod                    # ✅
+├── frontend/                     # (planned for Week 4)
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
@@ -200,21 +241,27 @@ content-analyzer/
 │   │   └── App.tsx
 │   ├── Dockerfile
 │   └── package.json
-├── docker-compose.yml
-├── .env.example                  # Template for environment variables
-├── .gitignore
-└── README.md
+├── docker-compose.yml            # ✅
+├── Makefile                      # ✅
+├── .env.example                  # ✅
+├── .gitignore                    # ✅
+└── README.md                     # ✅
 ```
 
-## Next Steps
+## Current Status
+
+**Week 1-2: Backend Foundation** ✅ COMPLETE
+
+- ✅ PostgreSQL schema and migrations
+- ✅ User model with bcrypt password hashing
+- ✅ JWT authentication (register, login, logout, /me)
+- ✅ Protected routes with JWT middleware
+- ✅ Comprehensive unit tests
+- ✅ Makefile for streamlined development
+
+**Next: Week 3 - AI Integration**
 
 See [PRODUCT_PLAN.md](./PRODUCT_PLAN.md) for the complete development roadmap.
-
-### Week 1-2: Backend Foundation
-- [ ] PostgreSQL schema and migrations
-- [ ] Basic CRUD API endpoints
-- [ ] JWT authentication
-- [ ] Unit tests
 
 ### Week 3: AI Integration
 - [ ] Gemini API integration
@@ -230,28 +277,56 @@ See [PRODUCT_PLAN.md](./PRODUCT_PLAN.md) for the complete development roadmap.
 
 ## Development Commands
 
+The project includes a comprehensive Makefile for streamlined development:
+
+```bash
+# Show all available commands
+make help
+
+# Development setup
+make dev-setup              # Install deps + start Docker services
+make run                    # Run the backend server
+make test                   # Run all tests
+make test-coverage          # Run tests with coverage report
+
+# Docker management
+make docker-up              # Start all services (postgres, redis, api)
+make docker-up-db           # Start only database services
+make docker-down            # Stop all services
+make docker-logs            # View logs from all services
+make docker-rebuild         # Rebuild and restart
+
+# Database
+make db-shell               # Open PostgreSQL shell
+make migrate-up             # Run pending migrations
+make migrate-down           # Rollback last migration
+
+# Code quality
+make fmt                    # Format Go code
+make lint                   # Run linter
+make ci                     # Run CI checks (lint + test)
+
+# Testing API endpoints
+make test-register          # Test registration endpoint
+make test-login             # Test login endpoint
+make health                 # Check API health
+
+# Utilities
+make verify                 # Verify entire setup is working
+make clean                  # Clean build artifacts
+```
+
+**Or use raw commands:**
+
 ```bash
 # Start all services
 docker-compose up -d
 
-# Stop all services
-docker-compose down
-
-# View logs
-docker-compose logs -f
-
 # Run Go application
-cd backend
-go run cmd/api/main.go
+cd backend && go run cmd/api/main.go
 
 # Run tests
-cd backend
-go test ./...
-
-# Install new Go dependency
-cd backend
-go get <package-name>
-go mod tidy
+cd backend && go test ./...
 ```
 
 ## Environment Variables

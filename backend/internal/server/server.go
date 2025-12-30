@@ -15,11 +15,13 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httplog/v2"
 
+	"github.com/sfumato00/content-analyzer/internal/auth"
 	"github.com/sfumato00/content-analyzer/internal/cache"
 	"github.com/sfumato00/content-analyzer/internal/config"
 	"github.com/sfumato00/content-analyzer/internal/database"
 	"github.com/sfumato00/content-analyzer/internal/handlers"
 	custommw "github.com/sfumato00/content-analyzer/internal/middleware"
+	"github.com/sfumato00/content-analyzer/internal/models"
 )
 
 // Server represents the HTTP server
@@ -104,9 +106,16 @@ func (s *Server) setupMiddleware() {
 
 // setupRoutes configures all routes
 func (s *Server) setupRoutes() {
+	// Create stores
+	userStore := models.NewUserStore(s.db.Pool)
+
+	// Create JWT manager
+	jwtManager := auth.NewJWTManager(s.config.JWTSecret)
+
 	// Create handlers
 	healthHandler := handlers.NewHealthHandler(s.db, s.cache)
 	apiHandler := handlers.NewAPIHandler(s.config)
+	authHandler := handlers.NewAuthHandler(userStore, jwtManager)
 
 	// Root endpoint
 	s.router.Get("/", apiHandler.Index)
@@ -122,22 +131,18 @@ func (s *Server) setupRoutes() {
 			http.Error(w, "API v1", http.StatusOK)
 		})
 
-		// Auth routes (TODO: implement)
+		// Auth routes (public)
 		r.Route("/auth", func(r chi.Router) {
-			r.Post("/register", func(w http.ResponseWriter, r *http.Request) {
-				http.Error(w, "TODO: Register endpoint", http.StatusNotImplemented)
-			})
-			r.Post("/login", func(w http.ResponseWriter, r *http.Request) {
-				http.Error(w, "TODO: Login endpoint", http.StatusNotImplemented)
-			})
-			r.Post("/logout", func(w http.ResponseWriter, r *http.Request) {
-				http.Error(w, "TODO: Logout endpoint", http.StatusNotImplemented)
-			})
+			r.Post("/register", authHandler.Register)
+			r.Post("/login", authHandler.Login)
+			r.Post("/logout", authHandler.Logout)
 		})
 
-		// Submissions routes (TODO: implement)
+		// Submissions routes (protected)
 		r.Route("/submissions", func(r chi.Router) {
-			// TODO: Add JWT middleware here
+			// Apply JWT middleware to all routes in this group
+			r.Use(auth.Middleware(jwtManager))
+
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "TODO: List submissions", http.StatusNotImplemented)
 			})
@@ -152,12 +157,12 @@ func (s *Server) setupRoutes() {
 			})
 		})
 
-		// User routes (TODO: implement)
+		// User routes (protected)
 		r.Route("/me", func(r chi.Router) {
-			// TODO: Add JWT middleware here
-			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-				http.Error(w, "TODO: Get current user", http.StatusNotImplemented)
-			})
+			// Apply JWT middleware to all routes in this group
+			r.Use(auth.Middleware(jwtManager))
+
+			r.Get("/", authHandler.Me)
 			r.Get("/stats", func(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "TODO: Get user stats", http.StatusNotImplemented)
 			})
