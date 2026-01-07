@@ -21,3 +21,6 @@ jobs:
 
       - name: Run CI
         run: make ci
+
+      - name: Coverage
+        run: cd backend && go test ./... -coverprofile=coverage.out
