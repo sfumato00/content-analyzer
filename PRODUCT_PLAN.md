@@ -2,7 +2,7 @@
 ## Personal Side Project Plan
 
 **Last Updated**: 2025-12-28
-**Status**: Development Phase - Week 1-2 Infrastructure Complete
+**Status**: Development Phase - Week 1-2 Backend Foundation Complete (frontend pending)
 **Developer**: Solo side project
 **Target Stack**: Go 1.24, TypeScript, Docker, PostgreSQL, Redis, Gemini AI
 **Estimated Cost**: $0-15/month
@@ -206,10 +206,11 @@ services:
     ports:
       - "8080:8080"
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  # Planned: enable when the frontend is scaffolded.
 ```
 
 ### Production Deployment (Free/Low Cost Options)
@@ -358,7 +359,7 @@ Authorization: Bearer <jwt_token>
 - GitHub Actions (CI/CD)
 - Fly.io or Railway (hosting)
 
-### Project Structure
+### Project Structure (Current)
 
 ```
 content-analyzer/
@@ -378,14 +379,6 @@ content-analyzer/
 │   ├── migrations/        # SQL migrations
 │   ├── Dockerfile
 │   └── go.mod
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── api/           # API client
-│   │   └── App.tsx
-│   ├── Dockerfile
-│   └── package.json
 ├── docker-compose.yml
 ├── .github/
 │   └── workflows/
@@ -393,7 +386,12 @@ content-analyzer/
 └── README.md
 ```
 
+**Planned additions**:
+- `frontend/` React app scaffold
+
 ### CI/CD Pipeline (GitHub Actions - FREE)
+
+Current workflow: `.github/workflows/ci.yml` runs `make ci` on push and pull requests.
 
 ```yaml
 name: CI/CD
@@ -542,7 +540,7 @@ func securityHeaders(next http.Handler) http.Handler {
 - [ ] Content submission form
 - [ ] Results display page
 - [ ] Deploy to Fly.io or Railway
-- [ ] Set up CI/CD pipeline
+- [x] Set up CI/CD pipeline
 
 **Success Criteria**:
 - Can submit text and get AI analysis
@@ -642,14 +640,14 @@ Domain:            $1/month (optional, use *.fly.dev subdomain for free)
 **Infrastructure & DevOps**:
 - [x] Docker containerization
 - [x] CI/CD pipeline setup
-- [x] Cloud deployment (Fly.io/Railway)
+- [ ] Cloud deployment (Fly.io/Railway) (planned)
 - [x] Monitoring and logging
 - [x] Production-ready security practices
 
 **Frontend**:
-- [x] TypeScript application
-- [x] Modern React development
-- [x] API integration
+- [ ] TypeScript application (planned)
+- [ ] Modern React development (planned)
+- [ ] API integration (planned)
 
 ### Portfolio Value
 
