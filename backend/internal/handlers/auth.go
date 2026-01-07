@@ -42,8 +42,8 @@ type LoginRequest struct {
 
 // AuthResponse represents the authentication response
 type AuthResponse struct {
-	User  *UserResponse       `json:"user"`
-	Token *auth.TokenPair     `json:"token"`
+	User  *UserResponse   `json:"user"`
+	Token *auth.TokenPair `json:"token"`
 }
 
 // UserResponse represents the user data in responses (without sensitive fields)

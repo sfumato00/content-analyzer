@@ -64,9 +64,9 @@ func TestValidateEmail(t *testing.T) {
 
 func TestValidatePassword(t *testing.T) {
 	tests := []struct {
-		name    string
+		name     string
 		password string
-		wantErr bool
+		wantErr  bool
 	}{
 		{
 			name:     "valid password",

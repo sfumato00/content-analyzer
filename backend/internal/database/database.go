@@ -6,10 +6,10 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // Database represents the database connection
@@ -26,11 +26,11 @@ func New(ctx context.Context, databaseURL string) (*Database, error) {
 	}
 
 	// Connection pool settings
-	config.MaxConns = 25                             // Maximum number of connections
-	config.MinConns = 5                              // Minimum number of connections
-	config.MaxConnLifetime = time.Hour               // Maximum connection lifetime
-	config.MaxConnIdleTime = 30 * time.Minute        // Maximum idle time
-	config.HealthCheckPeriod = time.Minute           // Health check frequency
+	config.MaxConns = 25                      // Maximum number of connections
+	config.MinConns = 5                       // Minimum number of connections
+	config.MaxConnLifetime = time.Hour        // Maximum connection lifetime
+	config.MaxConnIdleTime = 30 * time.Minute // Maximum idle time
+	config.HealthCheckPeriod = time.Minute    // Health check frequency
 
 	// Create connection pool
 	pool, err := pgxpool.NewWithConfig(ctx, config)

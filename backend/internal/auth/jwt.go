@@ -34,8 +34,8 @@ type JWTManager struct {
 func NewJWTManager(secretKey string) *JWTManager {
 	return &JWTManager{
 		secretKey:          secretKey,
-		accessTokenExpiry:  24 * time.Hour,       // 24 hours for access token
-		refreshTokenExpiry: 7 * 24 * time.Hour,   // 7 days for refresh token
+		accessTokenExpiry:  24 * time.Hour,     // 24 hours for access token
+		refreshTokenExpiry: 7 * 24 * time.Hour, // 7 days for refresh token
 	}
 }
 
